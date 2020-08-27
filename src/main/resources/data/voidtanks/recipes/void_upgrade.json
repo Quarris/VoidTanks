@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "OBO",
+        "BEB",
+        "OBO"
+    ],
+    "key": {
+        "O": {
+            "tag": "forge:obsidian"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "E": {
+            "tag": "forge:ender_pearls"
+        }
+    },
+    "result": {
+        "item": "voidtanks:void_upgrade"
+    }
+}

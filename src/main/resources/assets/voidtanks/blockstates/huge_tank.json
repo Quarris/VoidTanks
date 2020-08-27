@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "is_void=false": {
+            "model": "voidtanks:block/huge_tank"
+        },
+        "is_void=true": {
+            "model": "voidtanks:block/huge_void_tank"
+        }
+    }
+}

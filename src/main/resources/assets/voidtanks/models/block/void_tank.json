@@ -1,0 +1,7 @@
+{
+    "parent": "voidtanks:block/tank",
+    "textures": {
+        "main": "voidtanks:void_tank"
+    }
+
+}

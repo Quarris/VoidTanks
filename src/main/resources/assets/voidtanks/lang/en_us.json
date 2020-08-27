@@ -1,0 +1,15 @@
+{
+    "block.voidtanks.small_tank": "Small Tank",
+    "block.voidtanks.medium_tank": "Medium Tank",
+    "block.voidtanks.large_tank": "Large Tank",
+    "block.voidtanks.huge_tank": "Huge Tank",
+
+    "tile.voidtanks.small_tank": "Small Tank",
+    "tile.voidtanks.medium_tank": "Medium Tank",
+    "tile.voidtanks.large_tank": "Large Tank",
+    "tile.voidtanks.huge_tank": "Huge Tank",
+
+    "item.voidtanks.void_upgrade": "Void Upgrade",
+
+    "itemGroup.voidtanks": "Void Tanks"
+}

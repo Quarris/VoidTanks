@@ -1,0 +1,6 @@
+{
+    "parent": "voidtanks:block/void_tank",
+    "textures": {
+        "cap": "block/gold_block"
+    }
+}

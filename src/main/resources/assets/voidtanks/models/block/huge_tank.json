@@ -1,0 +1,6 @@
+{
+    "parent": "voidtanks:block/tank",
+    "textures": {
+        "cap": "block/diamond_block"
+    }
+}

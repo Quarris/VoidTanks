@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "I#I",
+        "IGI",
+        "I#I"
+    ],
+    "key": {
+        "I": {
+            "item": "minecraft:iron_bars"
+        },
+        "#": {
+            "tag": "forge:storage_blocks/iron"
+        },
+        "G": {
+            "tag": "forge:glass_panes"
+        }
+    },
+    "result": {
+        "item": "voidtanks:medium_tank"
+    }
+}
