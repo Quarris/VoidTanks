@@ -99,12 +99,14 @@ public class TankTile extends TileEntity {
     public void read(CompoundNBT tag) {
         super.read(tag);
         tank.readFromNBT(tag);
+        tank.setCapacity(tag.getInt("FluidCapacity"));
     }
 
     @Override
     public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         tank.writeToNBT(tag);
+        tag.putInt("FluidCapacity", tank.getCapacity());
         return tag;
     }
 
