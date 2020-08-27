@@ -13,7 +13,8 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.1'
+version = '1.0'
+def mcVersion = '1.15.2'
 group = 'quarris.voidtanks' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'VoidTanks'
 
@@ -88,7 +89,6 @@ minecraft {
 repositories {
     maven { url = "https://dvs1.progwml6.com/files/maven/" }
     maven { url = "https://repo.refinedmods.com/" }
-    flatDir { dirs 'deps' }
 }
 
 dependencies {
@@ -100,6 +100,7 @@ dependencies {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    archiveName = "${baseName}-${mcVersion}-${version}.${extension}"
     manifest {
         attributes([
                 "Specification-Title"     : "voidtanks",
@@ -112,6 +113,17 @@ jar {
         ])
     }
 }
+
+
+task sourcesJar(type: Jar) {
+    from(sourceSets.main.allSource)
+    archiveName = "${baseName}-${mcVersion}-${version}-sources.${extension}"
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 
 jar.finalizedBy('reobfJar')
 
