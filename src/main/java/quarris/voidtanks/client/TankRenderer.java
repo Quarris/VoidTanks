@@ -1,7 +1,6 @@
 package quarris.voidtanks.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -9,13 +8,14 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 import quarris.voidtanks.content.TankTile;
 
 public class TankRenderer extends TileEntityRenderer<TankTile> {
@@ -34,7 +34,7 @@ public class TankRenderer extends TileEntityRenderer<TankTile> {
         }
     }
 
-    private void renderFluidInTank(ILightReader world, BlockPos pos, FluidStack fluid, MatrixStack matrix, IRenderTypeBuffer buffer, float fluidPerc) {
+    private void renderFluidInTank(IBlockDisplayReader world, BlockPos pos, FluidStack fluid, MatrixStack matrix, IRenderTypeBuffer buffer, float fluidPerc) {
         matrix.push();
         matrix.translate(0.5d, 0.5d, 0.5d);
         Matrix4f matrix4f = matrix.getLast().getMatrix();
