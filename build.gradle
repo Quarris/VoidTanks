@@ -92,7 +92,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.36'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.43'
 
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
     runtimeOnly fg.deobf("com.refinedmods:refinedpipes:0.5+5")
