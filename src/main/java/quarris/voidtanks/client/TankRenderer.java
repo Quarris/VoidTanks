@@ -15,6 +15,7 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IBlockDisplayReader;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import quarris.voidtanks.content.TankTile;
 
@@ -34,19 +35,27 @@ public class TankRenderer extends TileEntityRenderer<TankTile> {
         }
     }
 
-    private void renderFluidInTank(IBlockDisplayReader world, BlockPos pos, FluidStack fluid, MatrixStack matrix, IRenderTypeBuffer buffer, float fluidPerc) {
+    // Ewy was here ;-)
+    private void renderFluidInTank(IBlockDisplayReader world, BlockPos pos, FluidStack fluidStack, MatrixStack matrix, IRenderTypeBuffer buffer, float fluidPerc) {
         matrix.push();
+
         matrix.translate(0.5d, 0.5d, 0.5d);
         Matrix4f matrix4f = matrix.getLast().getMatrix();
         Matrix3f matrix3f = matrix.getLast().getNormal();
-        int color = fluid.getFluid().getAttributes().getColor(world, pos);
-        TextureAtlasSprite sprite = this.getFluidStillSprite(fluid.getFluid());
-        IVertexBuilder builder = buffer.getBuffer(RenderType.getText(sprite.getAtlasTexture().getTextureLocation()));
+
+        Fluid fluid = fluidStack.getFluid();
+        FluidAttributes fluidAttributes = fluid.getAttributes();
+        TextureAtlasSprite fluidTexture = this.getFluidStillSprite(fluidAttributes, fluidStack);
+
+        int color = fluidAttributes.getColor(fluidStack);
+        IVertexBuilder builder = buffer.getBuffer(RenderType.getTranslucent());
+
         for (int i = 0; i < 4; i++) {
-            this.renderNorthFluidFace(sprite, matrix4f, matrix3f, builder, color, fluidPerc);
+            this.renderNorthFluidFace(fluidTexture, matrix4f, matrix3f, builder, color, fluidPerc);
             matrix.rotate(Vector3f.YP.rotationDegrees(90));
         }
-        this.renderTopFluidFace(sprite, matrix4f, matrix3f, builder, color, fluidPerc);
+        this.renderTopFluidFace(fluidTexture, matrix4f, matrix3f, builder, color, fluidPerc);
+
         matrix.pop();
     }
 
@@ -120,15 +129,15 @@ public class TankRenderer extends TileEntityRenderer<TankTile> {
                 .endVertex();
     }
 
-    private TextureAtlasSprite getFluidStillSprite(Fluid fluid) {
+    private TextureAtlasSprite getFluidStillSprite(FluidAttributes attributes, FluidStack fluidStack) {
         return Minecraft.getInstance()
                 .getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
-                .apply(fluid.getAttributes().getStillTexture());
+                .apply(attributes.getStillTexture(fluidStack));
     }
 
-    private TextureAtlasSprite getFluidFlowingSprite(Fluid fluid) {
+    private TextureAtlasSprite getFluidFlowingSprite(FluidAttributes attributes, FluidStack fluidStack) {
         return Minecraft.getInstance()
                 .getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
-                .apply(fluid.getAttributes().getFlowingTexture());
+                .apply(attributes.getStillTexture(fluidStack));
     }
 }
