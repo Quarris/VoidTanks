@@ -42,7 +42,7 @@ public class TankRenderer implements BlockEntityRenderer<TankTile> {
         Matrix3f matrix3f = matrix.last().normal();
 
         int color = fluidStack.getFluid().getAttributes().getColor(fluidStack);
-        VertexConsumer builder = buffer.getBuffer(RenderType.waterMask());
+        VertexConsumer builder = buffer.getBuffer(RenderType.translucent());
 
         for (int i = 0; i < 4; i++) {
             this.renderNorthFluidFace(this.getFluidFlowingSprite(fluidStack), matrix4f, matrix3f, builder, color, fluidPerc);

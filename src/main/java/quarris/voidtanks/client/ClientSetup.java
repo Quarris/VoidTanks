@@ -11,10 +11,10 @@ public class ClientSetup {
 
     public static void setup(FMLClientSetupEvent event) {
         BlockEntityRenderers.register(TankTile.TYPE, TankRenderer::new);
-        ItemBlockRenderTypes.setRenderLayer(VoidTanks.SMALL_TANK, RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(VoidTanks.MEDIUM_TANK, RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(VoidTanks.LARGE_TANK, RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(VoidTanks.HUGE_TANK, RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(VoidTanks.SMALL_TANK, RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(VoidTanks.MEDIUM_TANK, RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(VoidTanks.LARGE_TANK, RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(VoidTanks.HUGE_TANK, RenderType.cutoutMipped());
     }
 
 }
