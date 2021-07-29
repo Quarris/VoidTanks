@@ -1,15 +1,16 @@
 package quarris.voidtanks.content;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -23,21 +24,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class TankTile extends TileEntity {
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-    public static final TileEntityType<TankTile> TYPE = TileEntityType.Builder
-            .create(TankTile::new, VoidTanks.SMALL_TANK, VoidTanks.MEDIUM_TANK, VoidTanks.LARGE_TANK, VoidTanks.HUGE_TANK)
+public class TankTile extends BlockEntity {
+
+    public static final BlockEntityType<TankTile> TYPE = BlockEntityType.Builder
+            .of(TankTile::new, VoidTanks.SMALL_TANK, VoidTanks.MEDIUM_TANK, VoidTanks.LARGE_TANK, VoidTanks.HUGE_TANK)
             .build(null);
 
     private FluidTank tank;
     private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> tank);
 
-    public TankTile() {
-        this(0);
+    public TankTile(BlockPos pos, BlockState state) {
+        this(pos, state, 0);
     }
 
-    public TankTile(int buckets) {
-        super(TYPE);
+    public TankTile(BlockPos pos, BlockState state, int buckets) {
+        super(TYPE, pos, state);
         this.tank = new FluidTank(buckets * FluidAttributes.BUCKET_VOLUME) {
             @Override
             public int fill(FluidStack resource, FluidAction action) {
@@ -61,51 +64,51 @@ public class TankTile extends TileEntity {
     }
 
     public boolean isVoid() {
-        return this.world.getBlockState(this.pos).get(TankBlock.IS_VOID);
+        return this.level.getBlockState(this.worldPosition).getValue(TankBlock.IS_VOID);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 0, this.getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.getUpdateTag());
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+    public void handleUpdateTag(CompoundTag tag) {
+        this.load(tag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        this.load(pkt.getTag());
     }
 
     public void sendToClients() {
-        if (this.getWorld().isRemote) {
+        if (this.getLevel().isClientSide) {
             VoidTanks.LOGGER.debug("Tried to sync to clients from a client.");
             return;
         }
 
-        ServerWorld world = (ServerWorld) this.getWorld();
-        Stream<ServerPlayerEntity> entities = world.getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.getPos()), false);
-        SUpdateTileEntityPacket packet = this.getUpdatePacket();
-        entities.forEach(e -> e.connection.sendPacket(packet));
+        ServerLevel world = (ServerLevel) this.getLevel();
+        Stream<ServerPlayer> entities = world.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.getBlockPos()), false);
+        ClientboundBlockEntityDataPacket packet = this.getUpdatePacket();
+        entities.forEach(e -> e.connection.send(packet));
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag) {
-        super.read(state, tag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         tank.readFromNBT(tag);
         tank.setCapacity(tag.getInt("FluidCapacity"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        tag = super.write(tag);
+    public CompoundTag save(CompoundTag tag) {
+        tag = super.save(tag);
         tank.writeToNBT(tag);
         tag.putInt("FluidCapacity", tank.getCapacity());
         return tag;

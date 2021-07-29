@@ -1,10 +1,10 @@
 package quarris.voidtanks;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -24,9 +24,9 @@ public class VoidTanks {
         return new ResourceLocation(ID, name);
     }
 
-    public static final ItemGroup ITEM_GROUP = new ItemGroup(ID) {
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(HUGE_TANK);
         }
     };
@@ -36,7 +36,7 @@ public class VoidTanks {
     public static final Block LARGE_TANK = new TankBlock(64);
     public static final Block HUGE_TANK = new TankBlock(256);
 
-    public static final Item VOID_UPGRADE = new Item(new Item.Properties().group(ITEM_GROUP));
+    public static final Item VOID_UPGRADE = new Item(new Item.Properties().tab(ITEM_GROUP));
 
 
     public VoidTanks() {

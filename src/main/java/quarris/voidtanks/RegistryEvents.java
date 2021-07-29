@@ -1,9 +1,9 @@
 package quarris.voidtanks;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +25,7 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        Item.Properties tankProperties = new Item.Properties().group(VoidTanks.ITEM_GROUP);
+        Item.Properties tankProperties = new Item.Properties().tab(VoidTanks.ITEM_GROUP);
         event.getRegistry().registerAll(
                 new BlockItem(VoidTanks.SMALL_TANK, tankProperties).setRegistryName(VoidTanks.SMALL_TANK.getRegistryName()),
                 new BlockItem(VoidTanks.MEDIUM_TANK, tankProperties).setRegistryName(VoidTanks.MEDIUM_TANK.getRegistryName()),
@@ -36,7 +36,7 @@ public class RegistryEvents {
     }
 
     @SubscribeEvent
-    public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
+    public static void registerTiles(RegistryEvent.Register<BlockEntityType<?>> event) {
         event.getRegistry().registerAll(
                 TankTile.TYPE.setRegistryName(VoidTanks.createRes("tank"))
         );

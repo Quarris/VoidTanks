@@ -1,24 +1,23 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
         jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.3'
-def mcVersion = '1.16.5'
+def mcVersion = '1.17.1'
 group = 'quarris.voidtanks' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'VoidTanks'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -26,7 +25,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.17.1'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -92,10 +91,9 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.43'
-
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
-    runtimeOnly fg.deobf("com.refinedmods:refinedpipes:0.5+5")
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.8'
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
+    //runtimeOnly fg.deobf("com.refinedmods:refinedpipes:0.5+5")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -136,6 +134,7 @@ publishing {
     repositories {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
+            println "file:///${project.projectDir}/mcmodsrepo"
         }
     }
 }
